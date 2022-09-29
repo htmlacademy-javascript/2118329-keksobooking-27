@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Роман Шпунтенко](https://up.htmlacademy.ru/javascript/27/user/2118329).
-* Наставник: `Неизвестно`.
+* Наставник: [Артем Макаров](https://htmlacademy.ru/profile/deepsick).
 
 ---
 
