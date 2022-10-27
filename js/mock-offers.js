@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomFloat} from './util.js';
+import {getRandomInt, getRandomFloat} from './utils.js';
 
 const LISTINGS_NUMBER = 10;
 
@@ -20,12 +20,12 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-const latitude = {
+const Latitude = {
   MIN: 35.65000,
   MAX: 35.70000
 };
 
-const longitude = {
+const Longitude = {
   MIN: 139.70000,
   MAX: 139.80000
 };
@@ -50,8 +50,8 @@ const createOffer = () => ({
 });
 
 const createLocation = () => ({
-  lat: getRandomFloat(latitude.MIN, latitude.MAX, LOCATION_PRECISION),
-  lng: getRandomFloat(longitude.MIN, longitude.MAX, LOCATION_PRECISION)
+  lat: getRandomFloat(Latitude.MIN, Latitude.MAX, LOCATION_PRECISION),
+  lng: getRandomFloat(Longitude.MIN, Longitude.MAX, LOCATION_PRECISION)
 });
 
 const createListing = () => ({
@@ -63,11 +63,11 @@ const createListing = () => ({
 const getRandomListings = () => {
   const randomListings = Array.from({length: LISTINGS_NUMBER}, createListing);
   for (let i = 0; i <= LISTINGS_NUMBER - 1; i++) {
-    randomListings[i].author = `img/avatars/user${(String(i + 1)).padStart(2, '0')}.png`;
+    randomListings[i].author.avatar = `img/avatars/user${(String(i + 1)).padStart(2, '0')}.png`;
     randomListings[i].offer.address = `${randomListings[i].location.lat}, ${randomListings[i].location.lng}`;
   }
   return randomListings;
 };
 
-export {getRandomListings};
+export {FEATURES, getRandomListings};
 
