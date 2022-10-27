@@ -1,3 +1,3 @@
-import {getRandomListings} from './mock-data.js';
+import {insertListing} from './dom-listings.js';
 
-getRandomListings();
+document.querySelector('.map__canvas').appendChild(insertListing()[0]);
