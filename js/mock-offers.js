@@ -1,10 +1,10 @@
 import {getRandomInt, getRandomFloat} from './utils.js';
 
-const LISTINGS_NUMBER = 10;
+const ADS_NUMBER = 10;
 
 const MAX_PRICE = 50000;
 
-const LISTING_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const HOUSING_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
 const MAX_ROOMS = 7;
 
@@ -39,7 +39,7 @@ const createAuthor = () => ({
 const createOffer = () => ({
   title: 'Жилье посуточно',
   price: getRandomInt(1, MAX_PRICE),
-  type: LISTING_TYPES[getRandomInt(0, LISTING_TYPES.length - 1)],
+  type: HOUSING_TYPES[getRandomInt(0, HOUSING_TYPES.length - 1)],
   rooms: getRandomInt(1, MAX_ROOMS),
   guests: getRandomInt(1, MAX_GUESTS),
   checkin: CHECK_TIMES[getRandomInt(0, CHECK_TIMES.length - 1)],
@@ -54,20 +54,20 @@ const createLocation = () => ({
   lng: getRandomFloat(Longitude.MIN, Longitude.MAX, LOCATION_PRECISION)
 });
 
-const createListing = () => ({
+const createAd = () => ({
   author: createAuthor(),
   offer: createOffer(),
   location: createLocation()
 });
 
-const getRandomListings = () => {
-  const randomListings = Array.from({length: LISTINGS_NUMBER}, createListing);
-  for (let i = 0; i <= LISTINGS_NUMBER - 1; i++) {
-    randomListings[i].author.avatar = `img/avatars/user${(String(i + 1)).padStart(2, '0')}.png`;
-    randomListings[i].offer.address = `${randomListings[i].location.lat}, ${randomListings[i].location.lng}`;
+const getRandomAds = () => {
+  const randomAds = Array.from({length: ADS_NUMBER}, createAd);
+  for (let i = 0; i <= ADS_NUMBER - 1; i++) {
+    randomAds[i].author.avatar = `img/avatars/user${(String(i + 1)).padStart(2, '0')}.png`;
+    randomAds[i].offer.address = `${randomAds[i].location.lat}, ${randomAds[i].location.lng}`;
   }
-  return randomListings;
+  return randomAds;
 };
 
-export {FEATURES, getRandomListings};
+export {FEATURES, getRandomAds};
 

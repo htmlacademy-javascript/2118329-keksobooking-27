@@ -5,16 +5,16 @@ const MULTIPLICATION_BASE = 10;
 // Реализация на основании статьи Math.random() на MDN
 
 const getRandomInt = (min, max) => {
+
   if (min < 0 || max < 0) {
     return NaN;
   }
-  if (min > max) {
-    const storage = max;
-    max = min;
-    min = storage;
-  }
+
+  const lower = Math.min(min, max);
+  const upper = Math.max(min, max);
+
   return Math.floor(
-    Math.random() * (max - min + 1) + min
+    Math.random() * (upper - lower + 1) + lower
   );
 };
 
