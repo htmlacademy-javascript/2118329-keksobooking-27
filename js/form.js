@@ -72,8 +72,6 @@ const synchronizeTimes = () => {
   if (exitTimeField.value > entryTimeField.value) {
     exitTimeField.value = entryTimeField.value;
   }
-  console.log(entryTimeField.value);
-  console.log(exitTimeField.value);
 };
 
 entryTimeField.addEventListener('change', synchronizeTimes);
