@@ -23,16 +23,16 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
 });
 
-const roomNumberSelector = adForm.querySelector('#room_number');
-const guestCapacitySelector = adForm.querySelector('#capacity');
-const roomsToPeopleNumber = {
+const roomNumberField = adForm.querySelector('#room_number');
+const guestCapacityField = adForm.querySelector('#capacity');
+const roomsToCapacityMap = {
   '100': ['0'],
   '1': ['1'],
   '2': ['1', '2'],
   '3': ['1', '2', '3']
 };
 
-const typeToMinPrice = {
+const typeToMinPriceMap = {
   'bungalow': 0,
   'flat': 1000,
   'hotel': 3000,
@@ -43,40 +43,60 @@ const typeToMinPrice = {
 const housingTypeField = adForm.querySelector('#type');
 const priceField = adForm.querySelector('#price');
 
-priceField.min = typeToMinPrice[housingTypeField.value];
+priceField.min = typeToMinPriceMap[housingTypeField.value];
 
-const updateMinPrice = () => {
-  priceField.min = typeToMinPrice[housingTypeField.value];
-  priceField.placeholder = typeToMinPrice[housingTypeField.value];
+const priceSlider = adForm.querySelector('.ad-form__slider');
+
+noUiSlider.create(priceSlider, {
+  range: {
+    min: +priceField.min,
+    max: +priceField.max
+  },
+  start: priceField.min,
+  step: 100,
+  connect: 'lower',
+});
+
+const updateSlider = () => {
+  priceSlider.noUiSlider.updateOptions({range: {
+    min: +priceField.min,
+    max: +priceField.max
+  },
+  start: priceField.min,});
 };
 
-housingTypeField.addEventListener('change', updateMinPrice);
+priceSlider.noUiSlider.on('update', () => {
+  priceField.value = parseInt(priceSlider.noUiSlider.get(), 10);
+});
+
+const onMinPriceUpdate = () => {
+  priceField.min = typeToMinPriceMap[housingTypeField.value];
+  priceField.placeholder = typeToMinPriceMap[housingTypeField.value];
+  updateSlider();
+};
+
+housingTypeField.addEventListener('change', onMinPriceUpdate);
 
 const validatePrice = () => priceField.value.length && +priceField.value >= +priceField.min;
 
-const isEnoughRooms = () => roomsToPeopleNumber[roomNumberSelector.value].includes(guestCapacitySelector.value);
+const isEnoughRooms = () => roomsToCapacityMap[roomNumberField.value].includes(guestCapacityField.value);
 
-const getPriceWarning = () => `Цена на данный тип объекта не может быть ниже ${priceField.min}`;
+const getPriceWarning = (input) => `Цена на данный тип объекта не может быть ниже ${input.min}`;
 
-pristine.addValidator(guestCapacitySelector, isEnoughRooms, 'Не соответствует количеству комнат');
+pristine.addValidator(guestCapacityField, isEnoughRooms, 'Не соответствует количеству комнат');
 
-pristine.addValidator(priceField, validatePrice, getPriceWarning);
+pristine.addValidator(priceField, validatePrice, getPriceWarning(priceField));
 
 const entryTimeField = adForm.querySelector('#timein');
 const exitTimeField = adForm.querySelector('#timeout');
 
-const synchronizeTimes = () => {
-  if (entryTimeField.value < exitTimeField.value) {
-    entryTimeField.value = exitTimeField.value;
-  }
-  if (exitTimeField.value > entryTimeField.value) {
-    exitTimeField.value = entryTimeField.value;
-  }
-};
+entryTimeField.addEventListener('change', () => {
+  exitTimeField.value = entryTimeField.value;
+});
 
-entryTimeField.addEventListener('change', synchronizeTimes);
-
-exitTimeField.addEventListener('change', synchronizeTimes);
+exitTimeField.addEventListener('change', () => {
+  entryTimeField.value = exitTimeField.value;
+});
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
