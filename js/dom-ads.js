@@ -21,22 +21,25 @@ const clearFeatures = (features, element) => {
   });
 };
 
-const createAds = (ads) => {
-  const adElements = [];
-  for (const ad of ads) {
-    const newCard = createCard();
-    newCard.querySelector('.popup__title').textContent = ad.offer.title;
-    newCard.querySelector('.popup__text--address').textContent = ad.offer.address;
-    newCard.querySelector('.popup__text--price').innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
-    newCard.querySelector('.popup__type').textContent = HousingOptions[ad.offer.type];
-    newCard.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-    newCard.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
+const createAd = (ad) => {
+  const newCard = createCard();
+  newCard.querySelector('.popup__title').textContent = ad.offer.title;
+  newCard.querySelector('.popup__text--address').textContent = ad.offer.address;
+  newCard.querySelector('.popup__text--price').innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
+  newCard.querySelector('.popup__type').textContent = HousingOptions[ad.offer.type];
+  newCard.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
+  newCard.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
+  if (ad.offer.description) {
     newCard.querySelector('.popup__description').textContent = ad.offer.description;
+  }
+  if (ad.offer.features) {
     clearFeatures(ad.offer.features, newCard.querySelector('.popup__features'));
+  }
 
-    newCard.querySelector('.popup__avatar').src = ad.author.avatar;
+  newCard.querySelector('.popup__avatar').src = ad.author.avatar;
 
 
+  if (ad.offer.photos) {
     const photoContainer = newCard.querySelector('.popup__photos');
     ad.offer.photos.forEach((photo) => {
       const photoSample = newCard.querySelector('.popup__photo').cloneNode();
@@ -44,10 +47,9 @@ const createAds = (ads) => {
       photoContainer.appendChild(photoSample);
     });
     photoContainer.querySelector('.popup__photo:first-child').remove();
-
-    adElements.push(newCard);
   }
-  return adElements;
+
+  return newCard;
 };
 
-export {createAds};
+export {createAd};

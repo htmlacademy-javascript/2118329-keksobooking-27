@@ -1,21 +1,7 @@
-const mapFilters = document.querySelector('.map__filters');
-const filterOptions = Array.from(mapFilters.children);
+import {sendData} from './api.js';
+import {setInitialLocation} from './map.js';
+
 const adForm = document.querySelector('.ad-form');
-const formFields = adForm.querySelectorAll('fieldset');
-
-const deactivateForm = () => {
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
-  formFields.forEach((field) => field.setAttribute('disabled', ''));
-  filterOptions.forEach((option) => option.setAttribute('disabled', ''));
-};
-
-const activateForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-  formFields.forEach((field) => field.removeAttribute('disabled'));
-  filterOptions.forEach((option) => option.removeAttribute('disabled'));
-};
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -98,9 +84,29 @@ exitTimeField.addEventListener('change', () => {
   entryTimeField.value = exitTimeField.value;
 });
 
+const submitButton = adForm.querySelector('.ad-form__submit');
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+};
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+};
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  if (pristine.validate()) {
+    const formData = new FormData(evt.target);
+    blockSubmitButton();
+    sendData(formData);
+    adForm.reset();
+    setInitialLocation();
+    unblockSubmitButton();
+  }
 });
 
-export {deactivateForm, activateForm};
+const resetButton = adForm.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  setInitialLocation();
+});

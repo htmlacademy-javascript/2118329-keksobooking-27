@@ -1,6 +1,14 @@
-import {activateForm, deactivateForm} from './form.js';
-import {createAds} from './dom-ads.js';
-import {getRandomAds} from './mock-offers.js';
+import {activateForm, deactivateForm} from './form-activation.js';
+import {createAd} from './dom-ads.js';
+
+const TOKYO_CENTER_LAT = 35.6480;
+const TOKYO_CENTER_LNG = 139.7845;
+const LOCATION_PRECISION = 5;
+
+const MAIN_PIN_SIZE = [52, 52];
+const MAIN_PIN_ANCHOR = [26, 52];
+const COMPARABLE_PIN_SIZE = [40, 40];
+const COMPARABLE_PIN_ANCHOR = [20, 40];
 
 deactivateForm();
 
@@ -9,8 +17,8 @@ const map = L.map('map-canvas')
     activateForm();
   })
   .setView({
-    lat: 35.6480,
-    lng: 139.7845
+    lat: TOKYO_CENTER_LAT,
+    lng: TOKYO_CENTER_LNG
   }, 11);
 
 L.tileLayer(
@@ -22,14 +30,14 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: MAIN_PIN_SIZE,
+  iconAnchor: MAIN_PIN_ANCHOR,
 });
 
 const marker = L.marker(
   {
-    lat: 35.6480,
-    lng: 139.7845
+    lat: TOKYO_CENTER_LAT,
+    lng: TOKYO_CENTER_LNG
   },
   {
     draggable: true,
@@ -39,34 +47,41 @@ const marker = L.marker(
 marker.addTo(map);
 
 const addressField = document.querySelector('#address');
-addressField.value = '35.6480, 139.7845';
+addressField.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
 
 marker.on('moveend', (evt) => {
   const location = evt.target.getLatLng();
-  addressField.value = `${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`;
+  addressField.value = `${location.lat.toFixed(LOCATION_PRECISION)}, ${location.lng.toFixed(LOCATION_PRECISION)}`;
 });
 
-const smallPin = L.icon({
+const setInitialLocation = () => {
+  marker.setLatLng({
+    lat: TOKYO_CENTER_LAT,
+    lng: TOKYO_CENTER_LNG
+  });
+  addressField.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
+};
+
+const comparableAdsPin = L.icon({
   iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: COMPARABLE_PIN_SIZE,
+  iconAnchor: COMPARABLE_PIN_ANCHOR,
 });
 
-const points = getRandomAds();
-const popups = createAds(points);
-
-for (let i = 0; i < points.length; i++) {
+const addMarker = (ad) => {
   const similarMarker = L.marker(
     {
-      lat: points[i].location.lat,
-      lng: points[i].location.lng
+      lat: ad.location.lat,
+      lng: ad.location.lng
     },
     {
-      smallPin,
+      comparableAdsPin,
     },
   );
 
   similarMarker
     .addTo(map)
-    .bindPopup(popups[i]);
-}
+    .bindPopup(createAd(ad));
+};
+
+export {addMarker, setInitialLocation};
