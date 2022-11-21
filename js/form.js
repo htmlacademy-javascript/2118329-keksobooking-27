@@ -1,5 +1,6 @@
 import {sendData} from './api.js';
 import {setInitialLocation} from './map.js';
+import {isEscapeKey} from './utils.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -92,12 +93,50 @@ const unblockSubmitButton = () => {
   submitButton.disabled = false;
 };
 
+const bodyContainer = document.querySelector('body');
+const failureToPostMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+const postingSuccessMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+const repeatButton = failureToPostMessage.querySelector('.error__button');
+
+const closeModal = () => {
+  if (bodyContainer.contains(failureToPostMessage)) {
+    bodyContainer.removeChild(failureToPostMessage);
+  } else if (bodyContainer.contains(postingSuccessMessage)) {
+    bodyContainer.removeChild(postingSuccessMessage);
+  }
+
+  document.removeEventListener('click', closeModal);
+  repeatButton.removeEventListener('click', closeModal);
+  document.removeEventListener('keydown', onEscKeydown);
+};
+
+function onEscKeydown (evt) {
+  if (isEscapeKey(evt)) {
+    closeModal();
+  }
+}
+
+const notifyFailureToPost = () => {
+  bodyContainer.appendChild(failureToPostMessage);
+
+  document.addEventListener('click', closeModal);
+  document.addEventListener('keydown', onEscKeydown);
+  repeatButton.addEventListener('click', closeModal);
+};
+
+const notifyPostingSuccess = () => {
+  bodyContainer.appendChild(postingSuccessMessage);
+
+  document.addEventListener('click', closeModal);
+  document.addEventListener('keydown', onEscKeydown);
+};
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
     const formData = new FormData(evt.target);
     blockSubmitButton();
-    sendData(formData);
+    sendData(notifyPostingSuccess, notifyFailureToPost, formData);
     adForm.reset();
     setInitialLocation();
     unblockSubmitButton();

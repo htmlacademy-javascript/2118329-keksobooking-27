@@ -62,6 +62,8 @@ const setInitialLocation = () => {
   addressField.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
 };
 
+const markerGroup = L.layerGroup().addTo(map);
+
 const comparableAdsPin = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: COMPARABLE_PIN_SIZE,
@@ -80,8 +82,12 @@ const addMarker = (ad) => {
   );
 
   similarMarker
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(createAd(ad));
 };
 
-export {addMarker, setInitialLocation};
+const clearComparableMarkers = () => {
+  markerGroup.clearLayers();
+};
+
+export {addMarker, clearComparableMarkers, setInitialLocation};
