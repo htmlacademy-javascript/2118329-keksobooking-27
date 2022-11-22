@@ -12,9 +12,12 @@ const deactivateForm = () => {
 
 const activateForm = () => {
   adForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
   formFields.forEach((field) => field.removeAttribute('disabled'));
+};
+
+const activateFilters = () => {
+  mapFilters.classList.remove('map__filters--disabled');
   filterOptions.forEach((option) => option.removeAttribute('disabled'));
 };
 
-export {deactivateForm, activateForm};
+export {deactivateForm, activateForm, activateFilters};
