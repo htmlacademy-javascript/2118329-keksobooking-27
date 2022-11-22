@@ -7,8 +7,8 @@ const LOCATION_PRECISION = 5;
 
 const MAIN_PIN_SIZE = [52, 52];
 const MAIN_PIN_ANCHOR = [26, 52];
-const COMPARABLE_PIN_SIZE = [40, 40];
-const COMPARABLE_PIN_ANCHOR = [20, 40];
+const PIN_SIZE = [40, 40];
+const PIN_ANCHOR = [20, 40];
 
 deactivateForm();
 
@@ -64,10 +64,10 @@ const setInitialLocation = () => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const comparableAdsPin = L.icon({
+const pin = L.icon({
   iconUrl: './img/pin.svg',
-  iconSize: COMPARABLE_PIN_SIZE,
-  iconAnchor: COMPARABLE_PIN_ANCHOR,
+  iconSize: PIN_SIZE,
+  iconAnchor: PIN_ANCHOR,
 });
 
 const addMarker = (ad) => {
@@ -77,7 +77,7 @@ const addMarker = (ad) => {
       lng: ad.location.lng
     },
     {
-      comparableAdsPin,
+      pin,
     },
   );
 
@@ -86,8 +86,12 @@ const addMarker = (ad) => {
     .bindPopup(createAd(ad));
 };
 
-const clearComparableMarkers = () => {
+const clearMarkers = () => {
   markerGroup.clearLayers();
 };
 
-export {addMarker, clearComparableMarkers, setInitialLocation};
+const closePopups = () => {
+  map.closePopup();
+};
+
+export {addMarker, clearMarkers, setInitialLocation, closePopups};

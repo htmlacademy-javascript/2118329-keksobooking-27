@@ -1,4 +1,9 @@
-import {clearComparableMarkers} from './map.js';
+import {clearMarkers} from './map.js';
+
+const SIMILAR_ADS_NUMBER = 10;
+
+const DEFAULT_OPTION = 'any';
+const isDefaultOption = (value) => value === DEFAULT_OPTION;
 
 const filterForm = document.querySelector('.map__filters');
 const housingFieldInput = filterForm.querySelector('#housing-type');
@@ -6,7 +11,7 @@ const priceInput = filterForm.querySelector('#housing-price');
 const roomNumberInput = filterForm.querySelector('#housing-rooms');
 const guestNumberInput = filterForm.querySelector('#housing-guests');
 
-const filterByHousingType = (ad) => housingFieldInput.value === 'any' || housingFieldInput.value === ad.offer.type;
+const filterByHousingType = (ad) => isDefaultOption(housingFieldInput.value) || housingFieldInput.value === ad.offer.type;
 
 const checkPriceInRange = (value) => {
   if (priceInput.value === 'middle') {
@@ -18,34 +23,32 @@ const checkPriceInRange = (value) => {
   }
 };
 
-const filterByPrice = (ad) => priceInput.value === 'any' || checkPriceInRange(ad.offer.price);
+const filterByPrice = (ad) => isDefaultOption(priceInput.value) || checkPriceInRange(ad.offer.price);
 
-const filterByRoomNumber = (ad) => roomNumberInput.value === 'any' || +roomNumberInput.value === +ad.offer.rooms;
+const filterByRoomNumber = (ad) => isDefaultOption(roomNumberInput.value) || +roomNumberInput.value === +ad.offer.rooms;
 
-const filterByGuestNumber = (ad) => guestNumberInput.value === 'any' || +guestNumberInput.value === +ad.offer.guests;
+const filterByGuestNumber = (ad) => isDefaultOption(guestNumberInput.value) || +guestNumberInput.value === +ad.offer.guests;
 
 const filterByFeature = (ad) => {
   const checkedBoxes = Array.from(filterForm.querySelectorAll('input[type="checkbox"]:checked'));
   const selectedFeatures = checkedBoxes.map((feature) => feature.value);
 
-  return selectedFeatures.every((feature) => ad.offer.features && ad.offer.features.some((array) => array.includes(feature)));
+  return ad.offer.features && selectedFeatures.every((feature) => ad.offer.features.includes(feature));
 };
 
 const applyFilters = (ads) => {
-  clearComparableMarkers();
+  clearMarkers();
 
-  const conformingOptions = [];
+  const suitableOptions = [];
+  let i = 0;
 
-  for (let i = 0; i < ads.length; i++) {
-    if (conformingOptions.length < 10) {
-      if (filterByHousingType(ads[i]) && filterByPrice(ads[i]) && filterByRoomNumber(ads[i]) && filterByGuestNumber(ads[i]) && filterByFeature(ads[i])) {
-        conformingOptions.push(ads[i]);
-      }
-    } else {
-      break;
+  while (suitableOptions.length < SIMILAR_ADS_NUMBER && i < ads.length) {
+    if (filterByHousingType(ads[i]) && filterByPrice(ads[i]) && filterByRoomNumber(ads[i]) && filterByGuestNumber(ads[i]) && filterByFeature(ads[i])) {
+      suitableOptions.push(ads[i]);
     }
+    i++;
   }
-  return conformingOptions;
+  return suitableOptions;
 };
 
 export {applyFilters};
