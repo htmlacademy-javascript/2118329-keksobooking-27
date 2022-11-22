@@ -1,7 +1,3 @@
-import {sendData} from './api.js';
-import {setInitialLocation} from './map.js';
-import {isEscapeKey} from './utils.js';
-
 const adForm = document.querySelector('.ad-form');
 
 const pristine = new Pristine(adForm, {
@@ -48,8 +44,7 @@ const updateSlider = () => {
   priceSlider.noUiSlider.updateOptions({range: {
     min: +priceField.min,
     max: +priceField.max
-  },
-  start: priceField.min,});
+  }});
 };
 
 priceSlider.noUiSlider.on('update', () => {
@@ -85,67 +80,6 @@ exitTimeField.addEventListener('change', () => {
   entryTimeField.value = exitTimeField.value;
 });
 
-const submitButton = adForm.querySelector('.ad-form__submit');
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-};
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-};
+const validateForm = () => pristine.validate();
 
-const bodyContainer = document.querySelector('body');
-const failureToPostMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-const postingSuccessMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-const repeatButton = failureToPostMessage.querySelector('.error__button');
-
-const closeModal = () => {
-  if (bodyContainer.contains(failureToPostMessage)) {
-    bodyContainer.removeChild(failureToPostMessage);
-  } else if (bodyContainer.contains(postingSuccessMessage)) {
-    bodyContainer.removeChild(postingSuccessMessage);
-  }
-
-  document.removeEventListener('click', closeModal);
-  repeatButton.removeEventListener('click', closeModal);
-  document.removeEventListener('keydown', onEscKeydown);
-};
-
-function onEscKeydown (evt) {
-  if (isEscapeKey(evt)) {
-    closeModal();
-  }
-}
-
-const notifyFailureToPost = () => {
-  bodyContainer.appendChild(failureToPostMessage);
-
-  document.addEventListener('click', closeModal);
-  document.addEventListener('keydown', onEscKeydown);
-  repeatButton.addEventListener('click', closeModal);
-};
-
-const notifyPostingSuccess = () => {
-  bodyContainer.appendChild(postingSuccessMessage);
-
-  document.addEventListener('click', closeModal);
-  document.addEventListener('keydown', onEscKeydown);
-};
-
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    const formData = new FormData(evt.target);
-    blockSubmitButton();
-    sendData(notifyPostingSuccess, notifyFailureToPost, formData);
-    adForm.reset();
-    setInitialLocation();
-    unblockSubmitButton();
-  }
-});
-
-const resetButton = adForm.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  adForm.reset();
-  setInitialLocation();
-});
+export {validateForm};

@@ -1,6 +1,8 @@
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const TIMEOUT_DELAY = 500;
 
-function debounce (callback, timeoutDelay = 500) {
+const isEscapeKey = (key) => key === 'Escape';
+
+function debounce (callback, timeoutDelay = TIMEOUT_DELAY) {
   let timeoutId;
 
   return (...rest) => {
@@ -9,17 +11,4 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-function throttle (callback, delayBetweenFrames) {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-}
-
-export {isEscapeKey, debounce, throttle};
+export {isEscapeKey, debounce};

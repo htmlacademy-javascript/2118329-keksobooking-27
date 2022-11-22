@@ -1,11 +1,14 @@
-const ServerAddresses = {
-  GET_ADDRESS: 'https://27.javascript.pages.academy/keksobooking/data',
-  POST_ADDRESS: 'https://27.javascript.pages.academy/keksobooking'
+const ServerAddress = {
+  GET_ADS: 'https://27.javascript.pages.academy/keksobooking/data',
+  POST_AD: 'https://27.javascript.pages.academy/keksobookin'
 };
 
+const HttpMethod = {
+  POST: 'POST'
+};
 
 const getData = (onSuccess, onFail) => {
-  fetch(ServerAddresses.GET_ADDRESS)
+  fetch(ServerAddress.GET_ADS)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -21,16 +24,15 @@ const getData = (onSuccess, onFail) => {
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch(ServerAddresses.POST_ADDRESS, {
-    method: 'POST',
+  fetch(ServerAddress.POST_AD, {
+    method: HttpMethod.POST,
     body,
   })
     .then((response) => {
       if (response.ok) {
-        onSuccess();
-      } else {
-        throw new Error(`${response.status} ${response.statusText}`);
+        return onSuccess();
       }
+      throw new Error(`${response.status} ${response.statusText}`);
     })
     .catch((err) => {
       onFail(err);

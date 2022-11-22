@@ -6,8 +6,6 @@ const HousingOptions = {
   hotel: 'Отель'
 };
 
-const createCard = () => document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
-
 const clearFeatures = (features, element) => {
   const modifiers = features.map((feature) => `popup__feature--${feature}`);
   const featureIcons = element.querySelectorAll('.popup__feature');
@@ -22,7 +20,7 @@ const clearFeatures = (features, element) => {
 };
 
 const createAd = (ad) => {
-  const newCard = createCard();
+  const newCard = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
   newCard.querySelector('.popup__title').textContent = ad.offer.title;
   newCard.querySelector('.popup__text--address').textContent = ad.offer.address;
   newCard.querySelector('.popup__text--price').innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
