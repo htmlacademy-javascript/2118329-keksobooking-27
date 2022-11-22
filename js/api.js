@@ -1,6 +1,6 @@
 const ServerAddress = {
   GET_ADS: 'https://27.javascript.pages.academy/keksobooking/data',
-  POST_AD: 'https://27.javascript.pages.academy/keksobookin'
+  POST_AD: 'https://27.javascript.pages.academy/keksobooking'
 };
 
 const HttpMethod = {
