@@ -53,6 +53,11 @@ const showSuccessModal = () => {
 
   document.addEventListener('click', onModalClosing);
   document.addEventListener('keydown', onModalClosing);
+
+  adForm.reset();
+  filterForm.reset();
+  closePopups();
+  setInitialLocation();
 };
 
 adForm.addEventListener('submit', (evt) => {
@@ -66,11 +71,6 @@ adForm.addEventListener('submit', (evt) => {
   blockSubmitButton();
 
   sendData(showSuccessModal, showFailureModal, formData);
-
-  adForm.reset();
-  filterForm.reset();
-  closePopups();
-  setInitialLocation();
 
   unblockSubmitButton();
 });

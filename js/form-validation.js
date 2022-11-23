@@ -32,20 +32,13 @@ const priceSlider = adForm.querySelector('.ad-form__slider');
 
 noUiSlider.create(priceSlider, {
   range: {
-    min: +priceField.min,
+    min: 0,
     max: +priceField.max
   },
   start: priceField.min,
   step: 100,
   connect: 'lower',
 });
-
-const updateSlider = () => {
-  priceSlider.noUiSlider.updateOptions({range: {
-    min: +priceField.min,
-    max: +priceField.max
-  }});
-};
 
 priceSlider.noUiSlider.on('update', () => {
   priceField.value = parseInt(priceSlider.noUiSlider.get(), 10);
@@ -54,7 +47,6 @@ priceSlider.noUiSlider.on('update', () => {
 const onMinPriceUpdate = () => {
   priceField.min = typeToMinPriceMap[housingTypeField.value];
   priceField.placeholder = typeToMinPriceMap[housingTypeField.value];
-  updateSlider();
 };
 
 housingTypeField.addEventListener('change', onMinPriceUpdate);

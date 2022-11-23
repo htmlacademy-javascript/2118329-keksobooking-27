@@ -16,4 +16,9 @@ getData((data) => {
   filterForm.addEventListener('change', debounce(() => {
     applyFilters(data).forEach(addMarker);
   }));
+
+  filterForm.addEventListener('reset', debounce(() => {
+    applyFilters(data).forEach(addMarker);
+  }));
+
 }, showFailureToLoadMessage);

@@ -5,10 +5,10 @@ const TOKYO_CENTER_LAT = 35.6480;
 const TOKYO_CENTER_LNG = 139.7845;
 const LOCATION_PRECISION = 5;
 
-const MAIN_PIN_SIZE = [52, 52];
-const MAIN_PIN_ANCHOR = [26, 52];
-const PIN_SIZE = [40, 40];
-const PIN_ANCHOR = [20, 40];
+const MAIN_PIN_DIMENSIONS = [52, 52];
+const MAIN_PIN_ANCHOR_DIMENSIONS = [26, 52];
+const PIN_DIMENSIONS = [40, 40];
+const PIN_ANCHOR_DIMENSIONS = [20, 40];
 
 deactivateForm();
 
@@ -30,8 +30,8 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
-  iconSize: MAIN_PIN_SIZE,
-  iconAnchor: MAIN_PIN_ANCHOR,
+  iconSize: MAIN_PIN_DIMENSIONS,
+  iconAnchor: MAIN_PIN_ANCHOR_DIMENSIONS,
 });
 
 const marker = L.marker(
@@ -66,8 +66,8 @@ const markerGroup = L.layerGroup().addTo(map);
 
 const pin = L.icon({
   iconUrl: './img/pin.svg',
-  iconSize: PIN_SIZE,
-  iconAnchor: PIN_ANCHOR,
+  iconSize: PIN_DIMENSIONS,
+  iconAnchor: PIN_ANCHOR_DIMENSIONS,
 });
 
 const addMarker = (ad) => {
