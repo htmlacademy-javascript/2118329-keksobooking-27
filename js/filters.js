@@ -1,6 +1,5 @@
 import {clearMarkers} from './map.js';
-
-const SIMILAR_ADS_NUMBER = 10;
+import {SIMILAR_ADS_NUMBER} from './similar-ads.js';
 
 const DEFAULT_OPTION = 'any';
 const isDefaultOption = (value) => value === DEFAULT_OPTION;
