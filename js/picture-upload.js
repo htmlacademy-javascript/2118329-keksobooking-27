@@ -33,3 +33,10 @@ apartmentPhotoInput.addEventListener('change', () => {
   }
   apartmentPhotoPreview.appendChild(pictureElement);
 });
+
+const clearImages = () => {
+  avatarPreview.src = 'img/muffin-grey.svg';
+  apartmentPhotoPreview.innerHTML = '';
+};
+
+export {clearImages};

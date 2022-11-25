@@ -1,4 +1,4 @@
-const HousingOptions = {
+const housingOptionsMap = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -24,7 +24,7 @@ const createAd = (ad) => {
   newCard.querySelector('.popup__title').textContent = ad.offer.title;
   newCard.querySelector('.popup__text--address').textContent = ad.offer.address;
   newCard.querySelector('.popup__text--price').innerHTML = `${ad.offer.price} <span>₽/ночь</span>`;
-  newCard.querySelector('.popup__type').textContent = HousingOptions[ad.offer.type];
+  newCard.querySelector('.popup__type').textContent = housingOptionsMap[ad.offer.type];
   newCard.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   newCard.querySelector('.popup__text--time').textContent = `Заезд после ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
   if (ad.offer.description) {

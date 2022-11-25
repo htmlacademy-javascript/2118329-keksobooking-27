@@ -17,8 +17,10 @@ getData((data) => {
     applyFilters(data).forEach(addMarker);
   }));
 
-  filterForm.addEventListener('reset', debounce(() => {
+  filterForm.addEventListener('reset', () => {
     applyFilters(data).forEach(addMarker);
-  }));
+  });
 
 }, showFailureToLoadMessage);
+
+export {SIMILAR_ADS_NUMBER};

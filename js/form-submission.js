@@ -2,6 +2,7 @@ import {sendData} from './api.js';
 import {setInitialLocation, closePopups} from './map.js';
 import {isEscapeKey} from './utils.js';
 import {validateForm} from './form-validation.js';
+import {clearImages} from './picture-upload.js';
 
 const adForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
@@ -30,32 +31,46 @@ const removeModal = () => {
   }
 };
 
-const onModalClosing = (evt) => {
-  if (evt.type === 'click' || isEscapeKey(evt.key)) {
-    removeModal();
-  }
-
-  document.removeEventListener('click', onModalClosing);
-  repeatButton.removeEventListener('click', onModalClosing);
-  document.removeEventListener('keydown', onModalClosing);
+const onOverlayClick = () => {
+  removeModal();
+  removeListeners();
 };
+
+const onEscapeKeydown = (evt) => {
+  if (isEscapeKey(evt.key)) {
+    removeModal();
+    removeListeners();
+  }
+};
+
+const onButtonClick = () => {
+  removeModal();
+  removeListeners();
+};
+
+function removeListeners () {
+  document.removeEventListener('click', onOverlayClick);
+  repeatButton.removeEventListener('click', onEscapeKeydown);
+  document.removeEventListener('keydown', onButtonClick);
+}
 
 const showFailureModal = () => {
   bodyContainer.appendChild(failureToPostMessage);
 
-  document.addEventListener('click', onModalClosing);
-  document.addEventListener('keydown', onModalClosing);
-  repeatButton.addEventListener('click', onModalClosing);
+  document.addEventListener('click', onOverlayClick);
+  document.addEventListener('keydown', onEscapeKeydown);
+  repeatButton.addEventListener('click', onButtonClick);
 };
 
 const showSuccessModal = () => {
   bodyContainer.appendChild(postingSuccessMessage);
 
-  document.addEventListener('click', onModalClosing);
-  document.addEventListener('keydown', onModalClosing);
+  document.addEventListener('click', onOverlayClick);
+  document.addEventListener('keydown', onEscapeKeydown);
 
   adForm.reset();
   filterForm.reset();
+  clearImages();
   closePopups();
   setInitialLocation();
 };
