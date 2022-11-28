@@ -96,6 +96,6 @@ resetButton.addEventListener('click', (evt) => {
   adForm.reset();
   filterForm.reset();
   closePopups();
-
+  clearImages();
   setInitialLocation();
 });
